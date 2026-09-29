@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>中秋趴趴造 韓國帳本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#101722;
+    --paper:#f6f1e4;
+    --paper-2:#efe8d6;
+    --ink:#211f1a;
+    --ink-soft:#5c5647;
+    --gold:#b3872f;
+    --gold-deep:#8f6a22;
+    --plum:#7a3b52;
+    --pine:#3c6a52;
+    --line:#d9cfb4;
+    --shadow: 0 18px 40px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0; overflow-x:hidden;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, #1b2636 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans TC', -apple-system, sans-serif;
+    min-height:100%;
+    padding: 48px 20px 80px;
+    padding-top: calc(48px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+  .wrap{max-width:760px;margin:0 auto;}
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    color:#f2ead6;
+    margin-bottom:36px;
+  }
+  .eyebrow-row{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin-bottom: 10px;
+  }
+  .flag-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+  header .kicker{
+    font-size:13px; letter-spacing:.04em; color:#b7ad91;
+  }
+  header h1{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:clamp(28px,5vw,40px);
+    margin:0 0 6px;
+    letter-spacing:.02em;
+  }
+  header p{
+    margin:0; color:#9d947c; font-size:14px;
+  }
+
+  .total-stamp{
+    margin: 26px auto 0;
+    width: 180px; height:180px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative;
+    background: radial-gradient(circle at 50% 35%, rgba(179,135,47,.14), transparent 70%);
+  }
+  .total-stamp::before{
+    content:"";
+    position:absolute; inset:8px;
+    border-radius:50%;
+    border:1px dashed rgba(179,135,47,.55);
+  }
+  .total-stamp .label{
+    font-size:11px; letter-spacing:.08em; color:#c9bd9c; margin-bottom:4px;
+  }
+  .total-stamp .amount{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:24px;
+    color:#f2ead6;
+  }
+  .total-stamp .sub{
+    font-size:11px; color:#9d947c; margin-top:4px;
+  }
+  .rate-caption{
+    text-align:center;
+    margin-top:14px;
+    font-size:12px;
+    color:#9d947c;
+  }
+  .rate-caption button{
+    background:transparent; border:none; color:var(--gold); text-decoration:underline;
+    cursor:pointer; font-size:12px; padding:0; font-family:inherit;
+  }
+
+  /* ---------- Card / paper surface ---------- */
+  .paper{
+    background:var(--paper);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:28px;
+    margin-bottom:28px;
+    position:relative;
+  }
+  .paper h2{
+    font-family:'Noto Serif TC', serif;
+    font-size:19px;
+    margin:0 0 4px;
+    font-weight:700;
+  }
+  .paper .hint{
+    font-size:13px; color:var(--ink-soft); margin:0 0 20px;
+  }
+
+  /* perforation divider */
+  .perf{
+    border:none;
+    border-top:2px dashed var(--line);
+    margin:22px 0;
+  }
+
+  /* ---------- Settings (collapsible) ---------- */
+  details.settings{
+    background:transparent;
+    margin-bottom:20px;
+  }
+  details.settings summary{
+    cursor:pointer;
+    color:#c9bd9c;
+    font-size:13px;
+    list-style:none;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  details.settings summary::-webkit-details-marker{display:none;}
+  details.settings summary::before{
+    content:"⚙";
+    font-size:13px;
+  }
+  .settings-body{
+    margin-top:12px;
+    background:var(--paper);
+    border-radius:4px;
+    padding:18px;
+  }
+  .settings-body label{
+    display:block; font-size:12px; color:var(--ink-soft); margin-bottom:6px;
+  }
+  .settings-row{display:flex; gap:8px;}
+  .settings-row input{flex:1;}
+  .status-line{font-size:12px; margin-top:10px; color:var(--ink-soft);}
+  .status-line.ok{color:var(--pine);}
+  .status-line.err{color:var(--plum);}
+  .settings-block{margin-bottom:18px; padding-bottom:18px; border-bottom:1px dashed var(--line);}
+  .settings-block:last-child{margin-bottom:0; padding-bottom:0; border-bottom:none;}
+  .settings-block h3{margin:0 0 10px; font-size:13px; font-weight:600; color:var(--ink);}
+  .rate-row{display:flex; gap:8px 10px; align-items:center; flex-wrap:wrap;}
+  .rate-row span{font-size:13px; color:var(--ink-soft); white-space:nowrap;}
+  .rate-row input{width:90px; flex:none;}
+  .rate-row .btn-ghost{white-space:nowrap;}
+
+  /* ---------- Form ---------- */
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  select, input[type=text], input[type=number], input[type=url]{
+    width:100%;
+    font-family:inherit;
+    font-size:15px;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:#fffdf8;
+    color:var(--ink);
+  }
+  select:focus, input:focus{
+    outline:2px solid var(--gold);
+    outline-offset:1px;
+  }
+  .form-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:16px;
+  }
+  @media (max-width:520px){
+    .form-grid{grid-template-columns:1fr;}
+  }
+  .amount-group{display:flex; gap:8px;}
+  .amount-group input{flex:1; min-width:0;}
+  .amount-group select{width:96px; flex:none;}
+  select, input[type=text], input[type=number], input[type=url]{
+    width:100%;
+    font-family:inherit;
+    font-size:15px;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:#fffdf8;
+    color:var(--ink);
+  }
+  select:focus, input:focus{
+    outline:2px solid var(--gold);
+    outline-offset:1px;
+  }
+  .form-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:16px;
+  }
+  @media (max-width:520px){
+    .form-grid{grid-template-columns:1fr;}
+  }
+  .amount-group{display:flex; gap:8px;}
+  .amount-group input{flex:1; min-width:0;}
+  .amount-group select{width:96px; flex:none;}
+  .split-group{display:flex; flex-wrap:wrap; gap:8px;}
+  .split-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:8px 12px; border:1px solid var(--line); border-radius:3px;
+    background:#fffdf8; font-size:14px; cursor:pointer; user-select:none;
+  }
+  .split-chip input{margin:0; accent-color:var(--gold-deep);}
+  .split-chip:has(input:checked){border-color:var(--gold); background:var(--paper-2);}
+  .split-note{font-size:11px; color:var(--ink-soft); margin-top:2px;}
+  button{
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
+    border-radius:3px;
+  }
+  .btn-primary{
+    width:100%;
+    padding:13px;
+    background:var(--gold-deep);
+    color:#fbf5e6;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:.02em;
+    margin-top:6px;
+  }
+  .btn-primary:hover{background:#77551b;}
+  .btn-primary:disabled{opacity:.5; cursor:default;}
+  .btn-ghost{
+    background:transparent;
+    color:var(--gold-deep);
+    padding:8px 10px;
+    font-size:13px;
+  }
+  .btn-ghost:hover{text-decoration:underline;}
+
+  /* ---------- Person summary tags ---------- */
+  .tag-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+  }
+  @media (max-width:640px){
+    .tag-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  .tag{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:14px 12px;
+    text-align:center;
+  }
+  .tag .name{font-size:13px; color:var(--ink-soft); margin-bottom:6px;}
+  .tag .paid{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:18px;
+  }
+  .tag .count{font-size:11px; color:var(--ink-soft); margin-top:4px;}
+
+  /* ---------- Ledger table ---------- */
+  table{width:100%; border-collapse:collapse; font-size:14px;}
+  thead th{
+    text-align:left;
+    font-weight:600;
+    color:var(--ink-soft);
+    font-size:12px;
+    padding:0 8px 10px;
+    border-bottom:1px solid var(--line);
+  }
+  tbody td{
+    padding:11px 8px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  td.amt{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  td.amt .sub{font-size:11px; color:var(--ink-soft); font-weight:400; margin-top:2px;}
+  td.del{text-align:right; white-space:nowrap;}
+  .row-del{
+    background:transparent;
+    color:#a89a8a;
+    font-size:12px;
+    padding:4px 6px;
+  }
+  .row-del:hover{color:var(--plum);}
+  .empty-state{
+    text-align:center;
+    padding:30px 10px;
+    color:var(--ink-soft);
+    font-size:14px;
+  }
+
+  /* ---------- Settlement ---------- */
+  .balance-list{display:flex; flex-direction:column; gap:10px; margin-bottom:4px;}
+  .balance-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:10px 12px;
+    background:var(--paper-2);
+    border-radius:3px;
+    font-size:14px;
+  }
+  .balance-row .val{font-variant-numeric:tabular-nums; font-weight:600;}
+  .val.owe{color:var(--plum);}
+  .val.get{color:var(--pine);}
+  .val.even{color:var(--ink-soft);}
+
+  .stub{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px 16px;
+    border:1px dashed var(--gold);
+    border-radius:4px;
+    margin-bottom:10px;
+    font-size:14px;
+    background:#fffdf8;
+  }
+  .stub .arrow{color:var(--gold-deep); font-size:16px;}
+  .stub .amt{
+    margin-left:auto;
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    color:var(--gold-deep);
+    font-variant-numeric:tabular-nums;
+  }
+  .settled{
+    text-align:center; color:var(--pine); font-size:14px; padding:8px 0;
+  }
+
+  footer{
+    text-align:center; color:#6d6656; font-size:12px; margin-top:10px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow-row"><span class="flag-dot"></span><span class="kicker">TRIP LEDGER · SEOUL</span><span class="flag-dot"></span></div>
+    <h1>中秋趴趴造 韓國帳本</h1>
+    <p>旅費紀錄與分帳計算 · 統一換算成台幣</p>
+    <div class="total-stamp">
+      <div class="label">總支出（台幣）</div>
+      <div class="amount" id="totalAmount">NT$0</div>
+      <div class="sub" id="totalCount">0 筆紀錄</div>
+    </div>
+    <div class="rate-caption" id="rateCaption">
+      匯率：1 台幣 = 42.7 韓元　<button type="button" id="editRateBtn">修改匯率</button>
+    </div>
+  </header>
+
+  <details class="settings" id="settingsBlock">
+    <summary>設定</summary>
+    <div class="settings-body">
+
+      <div class="settings-block">
+        <h3>匯率設定（換算成台幣用）</h3>
+        <div class="rate-row">
+          <span>1 台幣 =</span>
+          <input type="number" id="rateInput" min="1" step="0.01" value="42.7">
+          <span>韓元</span>
+          <button class="btn-ghost" id="fetchRateBtn" style="border:1px solid var(--line);">抓即時匯率</button>
+          <button class="btn-ghost" id="saveRateBtn" style="border:1px solid var(--line);">儲存匯率</button>
+        </div>
+        <div class="status-line" id="rateStatus">這個匯率所有人看到的換算結果會一致。</div>
+      </div>
+
+    </div>
+  </details>
+
+  <section class="paper">
+    <h2>新增一筆支出</h2>
+    <p class="hint">填寫後會即時寫入下方支出明細。</p>
+
+    <form id="expenseForm">
+      <div class="form-grid">
+        <div class="field">
+          <label for="nameSelect">填寫人</label>
+          <select id="nameSelect" required>
+            <option value="" disabled selected>請選擇</option>
+            <option>洪嵐瑄</option>
+            <option>洪健鈞</option>
+            <option>楊泊諺</option>
+            <option>楊泊諭</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="amountInput">支出金額</label>
+          <div class="amount-group">
+            <input type="number" id="amountInput" min="0" step="1" placeholder="例如 15000" required>
+            <select id="currencySelect">
+              <option value="KRW" selected>韓幣</option>
+              <option value="TWD">台幣</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="itemInput">支出名稱</label>
+        <input type="text" id="itemInput" placeholder="例如 9/25 午餐" required>
+      </div>
+      <div class="field">
+        <label>分帳對象（這筆由誰分攤）</label>
+        <div class="split-group" id="splitGroup">
+          <label class="split-chip"><input type="checkbox" value="全部" checked>全部</label>
+          <label class="split-chip"><input type="checkbox" value="洪嵐瑄">洪嵐瑄</label>
+          <label class="split-chip"><input type="checkbox" value="洪健鈞">洪健鈞</label>
+          <label class="split-chip"><input type="checkbox" value="楊泊諺">楊泊諺</label>
+          <label class="split-chip"><input type="checkbox" value="楊泊諭">楊泊諭</label>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary" id="submitBtn">新增支出</button>
+    </form>
+  </section>
+
+  <section class="paper">
+    <h2>每人已付金額（換算台幣）</h2>
+    <p class="hint">目前實際墊付的總額，已用目前匯率統一換算成台幣。</p>
+    <div class="tag-grid" id="tagGrid"></div>
+  </section>
+
+  <section class="paper">
+    <h2>支出明細</h2>
+    <p class="hint">依時間排序，最新的在最上面；韓幣項目會附上約略台幣金額。</p>
+    <div id="ledgerWrap">
+      <div class="empty-state">尚無紀錄</div>
+    </div>
+  </section>
+
+  <section class="paper">
+    <h2>分帳結果（台幣）</h2>
+    <p class="hint">每筆支出依「分帳對象」平均分攤（預設全部四人），計算誰該補誰多少錢。</p>
+    <div class="field" style="max-width:220px;">
+      <label for="personFilter">查看對象</label>
+      <select id="personFilter">
+        <option value="">全部</option>
+        <option>洪嵐瑄</option>
+        <option>洪健鈞</option>
+        <option>楊泊諺</option>
+        <option>楊泊諭</option>
+      </select>
+    </div>
+    <div class="balance-list" id="balanceList"></div>
+    <hr class="perf">
+    <div id="settlementWrap"></div>
+  </section>
+
+  <footer>© Copyright 2026, All Rights Reserved by Joe</footer>
+
+</div>
+
+<script>
+(function(){
+  var PEOPLE = ['洪嵐瑄','洪健鈞','楊泊諺','楊泊諭'];
+  // Apps Script 網頁應用程式網址（已內建，前端不會顯示或讓人修改）
+  var apiUrl = 'https://script.google.com/macros/s/AKfycbz3EL_6uOUveguIzp6UjRyUpJNL8OYEdmzvqUnZIy7TQmf3bPT-sSsycGEQG5g_ZDAI/exec';
+  var records = [];
+  var rate = 42.7; // 1 TWD = rate KRW
+
+  var $ = function(id){ return document.getElementById(id); };
+  var settingsBlock = $('settingsBlock');
+  var submitBtn = $('submitBtn');
+  var rateInput = $('rateInput');
+  var rateStatus = $('rateStatus');
+  var personFilterSelect = $('personFilter');
+
+  function fmt(amount, symbol){
+    var v = Math.round(amount);
+    var neg = v < 0;
+    v = Math.abs(v);
+    var s = v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return (neg ? '-' : '') + symbol + s;
+  }
+  function fmtTWD(n){ return fmt(n, 'NT$'); }
+  function fmtKRW(n){ return fmt(n, '₩'); }
+
+  function toTWD(amount, currency){
+    if(currency === 'TWD') return amount;
+    return amount / rate;
+  }
+
+  function setRateStatus(msg, kind){
+    rateStatus.textContent = msg;
+    rateStatus.className = 'status-line' + (kind ? ' ' + kind : '');
+  }
+
+  $('editRateBtn').addEventListener('click', function(){
+    settingsBlock.open = true;
+    rateInput.focus();
+  });
+
+  $('fetchRateBtn').addEventListener('click', async function(){
+    setRateStatus('讀取即時匯率中…');
+    try{
+      var res = await fetch('https://open.er-api.com/v6/latest/TWD');
+      var data = await res.json();
+      if(data.result !== 'success' || !data.rates || !data.rates.KRW) throw new Error('查無資料');
+      rateInput.value = Number(data.rates.KRW).toFixed(2);
+      setRateStatus('已取得即時匯率：1 台幣 = ' + rateInput.value + ' 韓元，請按「儲存匯率」套用給所有人');
+    }catch(err){
+      setRateStatus('取得即時匯率失敗，請手動輸入（' + err.message + '）', 'err');
+    }
+  });
+
+  $('saveRateBtn').addEventListener('click', async function(){
+    if(!ensureConfigured()) return;
+    var v = Number(rateInput.value);
+    if(!v || v <= 0){ setRateStatus('匯率請輸入大於 0 的數字', 'err'); return; }
+    try{
+      var res = await fetch(apiUrl, {
+        method:'POST',
+        headers: { 'Content-Type':'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action:'setRate', rate:v })
+      });
+      var data = await res.json();
+      if(!data.success) throw new Error(data.error || '儲存失敗');
+      rate = v;
+      updateRateCaption();
+      setRateStatus('已儲存，所有人打開頁面都會用這個匯率換算');
+      render();
+    }catch(err){
+      setRateStatus('儲存失敗：' + err.message, 'err');
+    }
+  });
+
+  function updateRateCaption(){
+    $('rateCaption').innerHTML = '匯率：1 台幣 = ' + rate + ' 韓元　<button type="button" id="editRateBtn2">修改匯率</button>';
+    $('editRateBtn2').addEventListener('click', function(){
+      settingsBlock.open = true;
+      rateInput.focus();
+    });
+  }
+
+  function ensureConfigured(){
+    return true;
+  }
+
+  async function loadRecords(){
+    try{
+      var res = await fetch(apiUrl, { method:'GET' });
+      var data = await res.json();
+      if(!data.success) throw new Error(data.error || '讀取失敗');
+      records = data.data || [];
+      records.sort(function(a,b){ return new Date(b.timestamp) - new Date(a.timestamp); });
+      if(data.settings && data.settings.exchangeRate){
+        rate = Number(data.settings.exchangeRate);
+        rateInput.value = rate;
+        updateRateCaption();
+      }
+      render();
+    }catch(err){
+      setRateStatus('資料讀取失敗：' + err.message, 'err');
+    }
+  }
+
+  var splitBoxes = Array.prototype.slice.call(document.querySelectorAll('#splitGroup input'));
+  var splitAllBox = splitBoxes[0];
+  var splitPersonBoxes = splitBoxes.slice(1);
+  splitBoxes.forEach(function(box){
+    box.addEventListener('change', function(){
+      if(box === splitAllBox){
+        if(box.checked){ splitPersonBoxes.forEach(function(b){ b.checked = false; }); }
+        else{ box.checked = true; } // 至少要有一個選項
+      }else{
+        var chosen = splitPersonBoxes.filter(function(b){ return b.checked; });
+        if(chosen.length === 0 || chosen.length === PEOPLE.length){
+          splitPersonBoxes.forEach(function(b){ b.checked = false; });
+          splitAllBox.checked = true;
+        }else{
+          splitAllBox.checked = false;
+        }
+      }
+    });
+  });
+  function getSplitValue(){
+    if(splitAllBox.checked) return '全部';
+    return splitPersonBoxes.filter(function(b){ return b.checked; }).map(function(b){ return b.value; }).join(',');
+  }
+  function participantsOf(r){
+    var v = r.split;
+    if(!v || v === '全部') return PEOPLE.slice();
+    var list = String(v).split(',').map(function(x){ return x.trim(); }).filter(function(x){ return PEOPLE.indexOf(x) !== -1; });
+    return list.length ? list : PEOPLE.slice();
+  }
+
+  $('expenseForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    if(!ensureConfigured()) return;
+    var name = $('nameSelect').value;
+    var amount = Number($('amountInput').value);
+    var currency = $('currencySelect').value;
+    var item = $('itemInput').value.trim();
+    if(!name || !amount || amount <= 0 || !item) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '新增中…';
+    try{
+      var res = await fetch(apiUrl, {
+        method:'POST',
+        headers: { 'Content-Type':'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action:'add', name:name, amount:amount, currency:currency, item:item, split:getSplitValue() })
+      });
+      var data = await res.json();
+      if(!data.success) throw new Error(data.error || '新增失敗');
+      $('expenseForm').reset();
+      $('currencySelect').value = 'KRW';
+      await loadRecords();
+    }catch(err){
+      alert('新增失敗：' + err.message);
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = '新增支出';
+    }
+  });
+
+  async function deleteRecord(rowIndex){
+    if(!ensureConfigured()) return;
+    if(!confirm('確定要刪除這筆支出嗎？')) return;
+    try{
+      var res = await fetch(apiUrl, {
+        method:'POST',
+        headers: { 'Content-Type':'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action:'delete', rowIndex:rowIndex })
+      });
+      var data = await res.json();
+      if(!data.success) throw new Error(data.error || '刪除失敗');
+      await loadRecords();
+    }catch(err){
+      alert('刪除失敗：' + err.message);
+    }
+  }
+
+  function computeSettlement(balances){
+    var debtors = [], creditors = [];
+    PEOPLE.forEach(function(name){
+      var bal = balances[name];
+      if(bal < -1) debtors.push({name:name, amt:-bal});
+      else if(bal > 1) creditors.push({name:name, amt:bal});
+    });
+    debtors.sort(function(a,b){ return b.amt - a.amt; });
+    creditors.sort(function(a,b){ return b.amt - a.amt; });
+    var tx = [];
+    var i=0, j=0;
+    while(i < debtors.length && j < creditors.length){
+      var pay = Math.min(debtors[i].amt, creditors[j].amt);
+      tx.push({ from: debtors[i].name, to: creditors[j].name, amount: pay });
+      debtors[i].amt -= pay;
+      creditors[j].amt -= pay;
+      if(debtors[i].amt < 1) i++;
+      if(creditors[j].amt < 1) j++;
+    }
+    return tx;
+  }
+
+  function render(){
+    var totalTWD = records.reduce(function(s,r){ return s + toTWD(r.amount, r.currency); }, 0);
+    $('totalAmount').textContent = fmtTWD(totalTWD);
+    $('totalCount').textContent = records.length + ' 筆紀錄';
+
+    // per-person paid totals (in TWD)
+    var paid = {};
+    var counts = {};
+    PEOPLE.forEach(function(p){ paid[p] = 0; counts[p] = 0; });
+    records.forEach(function(r){
+      if(paid.hasOwnProperty(r.name)){
+        paid[r.name] += toTWD(r.amount, r.currency);
+        counts[r.name] += 1;
+      }
+    });
+
+    // tag grid
+    var tagHtml = PEOPLE.map(function(p){
+      return '<div class="tag"><div class="name">'+p+'</div><div class="paid">'+fmtTWD(paid[p])+'</div><div class="count">'+counts[p]+' 筆</div></div>';
+    }).join('');
+    $('tagGrid').innerHTML = tagHtml;
+
+    // ledger
+    var ledgerWrap = $('ledgerWrap');
+    if(records.length === 0){
+      ledgerWrap.innerHTML = '<div class="empty-state">尚無紀錄，新增第一筆支出吧</div>';
+    }else{
+      var rows = records.map(function(r){
+        var d = new Date(r.timestamp);
+        var dateStr = isNaN(d.getTime()) ? '' : (d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+        var mainAmt = r.currency === 'TWD' ? fmtTWD(r.amount) : fmtKRW(r.amount);
+        var subAmt = r.currency === 'TWD' ? '' : '<div class="sub">≈ '+fmtTWD(toTWD(r.amount, r.currency))+'</div>';
+        return '<tr>'+
+          '<td>'+dateStr+'</td>'+
+          '<td>'+r.name+'</td>'+
+          '<td>'+escapeHtml(r.item)+(r.split && r.split !== '全部' ? '<div class="split-note">分帳：'+escapeHtml(String(r.split).split(',').join('、'))+'</div>' : '')+'</td>'+
+          '<td class="amt">'+mainAmt+subAmt+'</td>'+
+          '<td class="del"><button class="row-del" data-row="'+r.rowIndex+'">刪除</button></td>'+
+        '</tr>';
+      }).join('');
+      ledgerWrap.innerHTML =
+        '<table><thead><tr><th>時間</th><th>填寫人</th><th>項目</th><th style="text-align:right;">金額</th><th></th></tr></thead>'+
+        '<tbody>'+rows+'</tbody></table>';
+      ledgerWrap.querySelectorAll('.row-del').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          deleteRecord(Number(btn.getAttribute('data-row')));
+        });
+      });
+    }
+
+    // settlement (all in TWD)
+    var owed = {};
+    PEOPLE.forEach(function(p){ owed[p] = 0; });
+    records.forEach(function(r){
+      var who = participantsOf(r);
+      var share = toTWD(r.amount, r.currency) / who.length;
+      who.forEach(function(p){ owed[p] += share; });
+    });
+    var balances = {};
+    PEOPLE.forEach(function(p){ balances[p] = paid[p] - owed[p]; });
+
+    var selectedPerson = personFilterSelect.value;
+    var visiblePeople = selectedPerson ? [selectedPerson] : PEOPLE;
+
+    var balanceHtml = visiblePeople.map(function(p){
+      var b = balances[p];
+      var cls = b > 1 ? 'get' : (b < -1 ? 'owe' : 'even');
+      var label = b > 1 ? '應收回 ' + fmtTWD(b) : (b < -1 ? '應補 ' + fmtTWD(-b) : '剛好打平');
+      return '<div class="balance-row"><span>'+p+'　<span style="color:var(--ink-soft);font-size:12px;">已付 '+fmtTWD(paid[p])+'・應分攤 '+fmtTWD(owed[p])+'</span></span><span class="val '+cls+'">'+label+'</span></div>';
+    }).join('');
+    $('balanceList').innerHTML = balanceHtml;
+
+    var tx = computeSettlement(balances);
+    if(selectedPerson){
+      tx = tx.filter(function(t){ return t.from === selectedPerson || t.to === selectedPerson; });
+    }
+    var settlementWrap = $('settlementWrap');
+    if(totalTWD === 0){
+      settlementWrap.innerHTML = '<div class="settled">還沒有任何支出</div>';
+    }else if(tx.length === 0){
+      settlementWrap.innerHTML = '<div class="settled">' + (selectedPerson ? selectedPerson + ' 不需要轉帳 🎉' : '帳已經算平，不需要互相轉帳 🎉') + '</div>';
+    }else{
+      settlementWrap.innerHTML = tx.map(function(t){
+        var fromLabel = t.from === selectedPerson ? '你' : t.from;
+        var toLabel = t.to === selectedPerson ? '你' : t.to;
+        return '<div class="stub"><span>'+fromLabel+'</span><span class="arrow">→</span><span>'+toLabel+'</span><span class="amt">'+fmtTWD(t.amount)+'</span></div>';
+      }).join('');
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  personFilterSelect.addEventListener('change', render);
+
+  updateRateCaption();
+  render();
+  loadRecords();
+})();
+</script>
+</body>
+</html>
